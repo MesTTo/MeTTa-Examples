@@ -1,38 +1,47 @@
 # Query a CSV file as a space
 
-Run `sh tools/run.sh examples/ch20-extending-the-engine/20-08-csv-row-spaces/01-csv-space.metta`
-from the repository root. The example creates its own temporary CSV and removes
-it after checking three queries.
+```metta
+!(import! &self (library lib_csv))
+!(import! &self (library lib_file))
+!(replace-file! "sales.csv" "001,12.50\n002,7.25\n")
+!(bind! &sales (csv-space "sales.csv"))
+!(test (sort-atom (collapse (match &sales (row $id $amount) ($id $amount))))
+       (("001" "12.50") ("002" "7.25")))
+```
+
+Every cell is a string, so parse a column that means a number.
 
 ```metta
 !(import! &self (library lib_csv))
-!(bind! &sales (csv-space "sales.csv"))
-!(match &sales (row $id $amount) ($id $amount))
+!(import! &self (library lib_file))
+!(import! &self (library lib_string))
+!(replace-file! "prices.csv" "001,12.50\n")
+!(bind! &prices (csv-space "prices.csv"))
+!(test (collapse (match &prices (row $id $amount) (parse-number $amount))) (12.5))
 ```
 
-For a file containing `001,12.50`, the query answers `("001" "12.50")`.
-Every cell is a string. Import `lib_string` and use `(parse-number $amount)`
-when the column represents a number. Headers remain ordinary row atoms;
-no record is silently discarded. Repeated rows remain repeated answers.
+| | |
+|---|---|
+| effect class | `readOnlyLookup` |
+| writes | none; copy row atoms into a native space to edit them |
+| open files | none; each query opens its own stream and releases it on completion, error or early termination |
+| a later query | reads later file contents |
+| validation | only the records a query consumes, so an early match does not scan the rest |
+| headers | ordinary row atoms; nothing is silently discarded |
+| repeated rows | repeated answers |
+| text | UTF-8, comma separators, doubled-quote escaping; quoted line endings keep their exact characters |
 
-`csv-space` validates a readable path and returns a space name. The name owns
-no open file. Each query opens a separate stream and releases it on completion,
-error, or early termination. A later query reads later file contents. CSV spaces
-validate only records consumed by the query; an early match does not scan the
-remaining file for malformed records. CSV spaces
-provide enumeration through the same Prolog seam used by Python's SpaceProvider;
-`match` performs the usual engine unification over the streamed atoms.
+| Refusal | When |
+|---|---|
+| `csv_malformed_row` | a different width or an unterminated quoted field, with its logical record number |
+| `csv_file_missing` | no such file |
+| `csv_permission_denied` | unreadable |
 
-The file uses UTF-8, comma separators and doubled-quote escaping. Quoted line
-endings retain their exact characters. A record
-with a different width or an unterminated quoted field raises
-`csv_malformed_row` with its logical record number. Missing files raise
-`csv_file_missing`; inaccessible files raise `csv_permission_denied`. Each
-error names its remedy. CSV spaces are read-only; copy row atoms into a native
-space to edit them. The constructor's effect class is `readOnlyLookup`.
+Each names its remedy.
+
+`01-csv-space.metta` beside this file runs under the gate, creating its own
+temporary CSV and removing it after three queries.
 
 [The CSV library](../../../lib/lib_csv/README.md) also parses and encodes text,
-reads field lists, writes and appends files, and accepts explicit dialects.
-Snapshots carry logical record numbers; their ordinary space enumeration is
-an unordered bag. Blank records have zero fields, while quoted empty fields
-have one. Use `(width any)` when variable widths are intentional.
+reads field lists, writes and appends files, and accepts explicit dialects. Use
+`(width any)` when variable widths are intentional.
