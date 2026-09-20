@@ -12,7 +12,7 @@ Build it, then run the example from the repository root:
 ```sh
 swipl-ld -shared -o examples/ch19-spaces-backed-by-anything/19-02-a-space-in-c/cstore \
                     examples/ch19-spaces-backed-by-anything/19-02-a-space-in-c/cstore.c
-sh run.sh examples/ch19-spaces-backed-by-anything/19-02-a-space-in-c/01-c_space.metta
+sh tools/run.sh examples/ch19-spaces-backed-by-anything/19-02-a-space-in-c/01-c_space.metta
 ```
 
 The example skips itself when `cstore.so` has not been built, because a

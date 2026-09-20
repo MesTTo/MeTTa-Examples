@@ -1,7 +1,7 @@
 ;Purpose: the lib_torch extension library from plain MeTTa: tensors, algebra
 ;  and autograd through py-call with no Python-side setup. Skipped by test.sh
 ;  alongside torch.metta, since CI has no PyTorch; run it directly with
-;  sh run.sh ./examples/ch11-python-as-a-notation/08-torch_lib.metta
+;  sh tools/run.sh ./examples/ch11-python-as-a-notation/08-torch_lib.metta
 ;Open Obligations:
 ;  To Do: None
 ;  Hacks: None

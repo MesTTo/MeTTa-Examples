@@ -1,6 +1,6 @@
 # Query a CSV file as a space
 
-Run `sh run.sh examples/ch20-extending-the-engine/20-08-csv-row-spaces/01-csv-space.metta`
+Run `sh tools/run.sh examples/ch20-extending-the-engine/20-08-csv-row-spaces/01-csv-space.metta`
 from the repository root. The example creates its own temporary CSV and removes
 it after checking three queries.
 

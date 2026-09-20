@@ -2,7 +2,7 @@
 ;an Expression, a number is Grounded, a variable is a Variable. A bare NAME is
 ;the one case shape cannot answer, and this is the rule that does.
 ;
-;    sh run.sh examples/ch09-types/07-metatype_of_a_name.metta
+;    sh tools/run.sh examples/ch09-types/07-metatype_of_a_name.metta
 ;
 ;A name is Grounded when the engine holds a FUNCTION for it, and a Symbol when
 ;it does not. That is the whole rule and there is no list of special names

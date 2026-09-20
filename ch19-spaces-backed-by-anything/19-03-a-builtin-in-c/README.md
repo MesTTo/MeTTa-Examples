@@ -9,7 +9,7 @@ Build it, then run the example from the repository root:
 ```sh
 swipl-ld -shared -o examples/ch19-spaces-backed-by-anything/19-03-a-builtin-in-c/cbump \
                     examples/ch19-spaces-backed-by-anything/19-03-a-builtin-in-c/cbump.c
-sh run.sh examples/ch19-spaces-backed-by-anything/19-03-a-builtin-in-c/01-c_extension.metta
+sh tools/run.sh examples/ch19-spaces-backed-by-anything/19-03-a-builtin-in-c/01-c_extension.metta
 ```
 
 The example skips itself when `cbump.so` has not been built, rather than
@@ -30,7 +30,7 @@ boundary; only the handle does.
 ```sh
 swipl-ld -shared -o examples/ch19-spaces-backed-by-anything/19-03-a-builtin-in-c/handle \
                     examples/ch19-spaces-backed-by-anything/19-03-a-builtin-in-c/handle.c
-sh run.sh examples/ch19-spaces-backed-by-anything/19-03-a-builtin-in-c/02-handle.metta
+sh tools/run.sh examples/ch19-spaces-backed-by-anything/19-03-a-builtin-in-c/02-handle.metta
 ```
 
 Nothing in the engine had to change for this. A blob already answers

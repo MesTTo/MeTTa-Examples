@@ -2,7 +2,7 @@
 ;is a list of forms, and a form prefixed with ! is RUN when the reader
 ;reaches it. The engine prints what it answers.
 ;
-;    sh run.sh examples/ch01-getting-started/01-hello.metta
+;    sh tools/run.sh examples/ch01-getting-started/01-hello.metta
 ;
 ;prints 42.
 !(+ 40 2)
