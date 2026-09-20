@@ -14,7 +14,7 @@ notes. The default keeps those diagnostics quiet.
 
 Run all of them:
 
-    sh test.sh
+    sh tools/test.sh
 
 ## How the numbers work
 
