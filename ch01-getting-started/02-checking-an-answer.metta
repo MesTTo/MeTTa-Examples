@@ -9,7 +9,7 @@
 ;
 ;Read `test` as an assertion with a trace: the line is printed whether the
 ;check passes or fails, so a passing run is still readable output. A mismatch
-;prints ❌ and fails the process, which is what makes `sh test.sh` a suite.
+;prints ❌ and fails the process, which is what makes `sh tools/test.sh` a suite.
 !(test (+ 40 2) 42)
 
 ;`test` is THIS IMPLEMENTATION'S, not the MeTTa language's. KERNEL.md
