@@ -1,7 +1,7 @@
 ;; Purpose: observe one answer while keeping its value and editable source.
 ;; Guarantees: a failing alternative does not add an answer; replacing the
 ;;   source equation changes the next observation [tested:
-;;   sh test.sh examples/ch05-equations-and-evaluation/05-01-an-equation-is-a-rewrite/11-single_answer.metta;
+;;   sh tools/test.sh examples/ch05-equations-and-evaluation/05-01-an-equation-is-a-rewrite/11-single_answer.metta;
 ;;   commit=eec241dcf822db6c4c1d1ecdb6092a6a9f3c7851].
 
 (= (unique-value) 11)

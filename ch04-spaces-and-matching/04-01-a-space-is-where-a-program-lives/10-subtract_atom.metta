@@ -1,7 +1,7 @@
 ; Purpose: demonstrate single-occurrence subtraction and draining.
 ; Guarantees: native subtraction consumes one copy and returns False on a miss
 ;   [tested:
-;   sh test.sh examples/ch04-spaces-and-matching/04-01-a-space-is-where-a-program-lives/10-subtract_atom.metta;
+;   sh tools/test.sh examples/ch04-spaces-and-matching/04-01-a-space-is-where-a-program-lives/10-subtract_atom.metta;
 ;   commit=8806bbf1f5fb8ff233e2ed4868190757d4fb7041].
 ;
 ;A space is a MULTISET, so removal has two honest readings and the engine

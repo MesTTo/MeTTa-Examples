@@ -65,5 +65,5 @@ is charged, while calls excluded from the report still execute.
 Run all three examples from the repository root:
 
 ```sh
-sh test.sh examples/ch20-extending-the-engine/20-05-observing-execution/*.metta
+sh tools/test.sh examples/ch20-extending-the-engine/20-05-observing-execution/*.metta
 ```
