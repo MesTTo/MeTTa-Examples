@@ -897,13 +897,13 @@ return shapes and no prose to guess at.
 
 ## Origins
 
-143 of the 386 programs here derive from the MeTTa examples of the project at
+143 of the 390 programs here derive from the MeTTa examples of the project at
 https://github.com/patham9/PeTTa, MIT licensed, at commit
 `43705f5d9ff8958ffe7f0aa6777fb8477f2401f2` (2026-07-24). They were reorganised
 into the reading order above, and some were edited. 13 people wrote them
 there, most of them Patrick Hammer; the rest are credited file by file, because
 naming only the most prolific contributor would miscredit the others. The other
-243 examples were written for this repository.
+247 examples were written for this repository.
 
 `ORIGINS.tsv` names every derived file beside the upstream file it came from,
 how much of the original body survives with comments ignored, and who wrote it
