@@ -8,7 +8,7 @@ sh tools/run.sh ./examples/ch01-getting-started/01-hello.metta   # one
 sh tools/test.sh                                                 # all of them
 ```
 
-The merged corpus contains 360 examples that run in the shell suite.
+The merged corpus contains 361 examples that run in the shell suite.
 `tests/data/example_skips.txt` names the five that do not.
 
 Directory names are the reading order, so a listing is the index:
