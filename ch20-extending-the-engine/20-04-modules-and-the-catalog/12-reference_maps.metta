@@ -2,29 +2,29 @@
 ; [tested: examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/12-reference_maps.metta; commit=a95e6c90c910db30c72311abadd58dee5349978c].
 
 ; only selects named public heads; except selects the remaining public heads.
-(from ../examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/_fixtures/references/maps (only (map-value)))
+(from ./_fixtures/references/maps (only (map-value)))
 !(test (map-value 2) 3)
 !(test (collapse (map-label)) ((map-label)))
-(from ../examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/_fixtures/references/maps (except (map-value)))
+(from ./_fixtures/references/maps (except (map-value)))
 !(test (map-label) label)
 
 ; Each map runs on a head name, once. Aliases retain the same defining body.
-(from ../examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/_fixtures/references/maps (prefix p.))
-(from ../examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/_fixtures/references/maps (rename ((map-value renamed))))
-(from ../examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/_fixtures/references/maps (qualified module))
+(from ./_fixtures/references/maps (prefix p.))
+(from ./_fixtures/references/maps (rename ((map-value renamed))))
+(from ./_fixtures/references/maps (qualified module))
 !(test (p.map-value 2) 3)
 !(test (renamed 2) 3)
 !(test (module.map-value 2) 3)
 !(test (collapse (map-label)) (label))
 
 ; A call pattern constrains inputs while retaining the same body and arrow.
-(from ../examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/_fixtures/references/maps
+(from ./_fixtures/references/maps
       (rename ((map-value (only-two 2)))))
 !(test (only-two 2) 3)
 
 ; A map may answer several names or patterns, or none. Lambda and partial
 ; application are ordinary functions; the five helpers have no special loader.
-(from ../examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/_fixtures/references/maps
+(from ./_fixtures/references/maps
       (|-> ($h) (if (== $h map-value) (superpose (lambda-one lambda-two)) (empty))))
 !(test (lambda-one 2) 3)
 !(test (lambda-two 2) 3)
@@ -32,6 +32,6 @@
 
 ; A missing map uses this space's default, identity until changed.
 !(pragma! from-map (prefix default.))
-(from ../examples/ch20-extending-the-engine/20-04-modules-and-the-catalog/_fixtures/references/maps)
+(from ./_fixtures/references/maps)
 !(test (default.map-value 2) 3)
 !(pragma! from-map none)
