@@ -139,3 +139,31 @@
 ;`!(ip False yes)` answers nothing and `!(collapse (ip False yes))` answers
 ;`()`.
 !(test (collapse (if-partial False yes)) ())
+
+;------------------------------------------------------------- the workers
+;Each of the three forms above delegates to a worker, and the split is where
+;the specification's control flow actually lives. A worker is called the way
+;its caller calls it: inside `function`, with `eval` and a `chain` to catch
+;what `return` hands back.
+
+;`mm-read` is the tape's own accessor: the cell under the machine, which is
+;the middle of the triple and nothing else.
+!(test (mm-read ((1) 7 (2))) 7)
+
+;`mm-switch-internal` is where a case either matches or the search moves on.
+;Exhausting the cases answers NotReducible rather than an error, which is what
+;lets a caller distinguish "no rule applied" from "a rule went wrong".
+!(test (function (chain (eval (mm-switch-internal 1 ((1 one) ()))) $r (return $r)))
+       one)
+!(test (function (chain (eval (mm-switch-internal 9 ((1 one) ()))) $r (return $r)))
+       NotReducible)
+
+;`mm-subst` replaces a variable throughout a template, and it is TOTAL: the
+;second argument must be a variable, and anything else answers its own Error
+;rather than failing.
+!(test (mm-subst 5 $x ($x $x)) (5 5))
+
+;`mm-tm-body` is the machine's step. Reaching HALT returns the tape as it
+;stands, without consulting the rule at all, which is why the rule argument
+;here is never read.
+!(test (function (eval (mm-tm-body unused HALT ((1) 7 (2))))) ((1) 7 (2)))
