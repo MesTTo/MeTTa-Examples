@@ -60,11 +60,12 @@
 
 ;Timers are futures that start later, so the same await and cancel serve
 ;them: `timer_after` fires once and `timer_every` repeats until cancelled.
+;`thread_cancel` answers whether it stopped something, so True says the
+;repeating timer was still running when it was cancelled.
 !(test (collapse (thread_await (timer_after 0.05 (inc 41)))) (42))
 !(test (let $t (timer_every 0.05 (inc 41))
-         (let $_ (sleep 0.2)
-           (let $__ (thread_cancel $t) stopped)))
-       stopped)
+         (let $_ (sleep 0.2) (thread_cancel $t)))
+       True)
 
 ;`with_lock` holds a named lock while evaluating, and keeps EVERY answer
 ;where SWI's own with_mutex is once/1.
