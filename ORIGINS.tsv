@@ -159,7 +159,7 @@ examples/ch22-a-reasoner-you-can-serve/22-02-weighted-answers/06-pln_roman.metta
 examples/ch22-a-reasoner-you-can-serve/22-02-weighted-answers/07-pln_tuffy.metta	examples/pln_tuffy.metta	0.997	Patrick Hammer
 examples/ch22-a-reasoner-you-can-serve/22-02-weighted-answers/09-nars_tuffy.metta	examples/nars_tuffy.metta	0.995	Patrick Hammer
 examples/ch22-a-reasoner-you-can-serve/22-03-search/01-newtons_method.metta	examples/newtons_method.metta	1.0	DagmawiKK
-examples/ch22-a-reasoner-you-can-serve/22-03-search/02-tilepuzzle.metta	examples/tilepuzzle.metta	0.994	Patrick Hammer; Peter Isaev
+examples/ch22-a-reasoner-you-can-serve/22-03-search/02-tilepuzzle.metta	examples/tilepuzzle.metta	0.991	Patrick Hammer; Peter Isaev
 examples/ch22-a-reasoner-you-can-serve/22-03-search/03-matespace.metta	examples/matespace.metta	1.0	Patrick Hammer
 examples/ch22-a-reasoner-you-can-serve/22-03-search/04-matespace2.metta	examples/matespace2.metta	1.0	Patrick Hammer
 examples/ch22-a-reasoner-you-can-serve/22-03-search/05-fibadd.metta	examples/fibadd.metta	0.899	Patrick Hammer

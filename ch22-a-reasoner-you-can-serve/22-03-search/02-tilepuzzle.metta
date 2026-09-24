@@ -1,7 +1,15 @@
 ;Purpose: solve the eight-tile puzzle by breadth-first search over a queue.
-;Guarantees: the answer is 181441, and the let* queue bindings keep that answer
-;while their fresh value outputs bind in constant time [tested:
+;Guarantees: the answer is 181440, the 9!/2 boards reachable from the start,
+;each dequeued once, and the let* queue bindings keep that answer while their
+;fresh value outputs bind in constant time [tested:
 ;test_let_of_a_fresh_variable_does_not_walk_the_term].
+;
+;This file differs from upstream PeTTa's examples/tilepuzzle.metta (43705f5)
+;in one call. Upstream's bfs_all (line 182) seeds the duplicate store with
+;add-unique-item-or-empty, which nothing defines, so the call stays data and
+;the start board never enters &dup: a neighbour puts it back on the queue and
+;it is dequeued a second time, and upstream answers 181441. Here bfs_all seeds
+;&dup with add-unique-or-fail, the call bfs_loop makes for every other board.
 
 (= (move (___ $_2 $_3
           $_4 $_5 $_6
@@ -187,8 +195,8 @@
          (bfs_loop $Q2 $N1)))
 
 (= (bfs_all $Start)
-   (let* (($Pt (add-unique-item-or-empty $Start))
+   (let* (($Pt (add-unique-or-fail &dup $Start))
           ($Q1 (enqueue $Start (empty-queue))))
         (bfs_loop $Q1 0)))
 
-!(test (let $x (bfs_all (___ 1 2 3 4 5 6 7 8)) $x) 181441)
+!(test (let $x (bfs_all (___ 1 2 3 4 5 6 7 8)) $x) 181440)
