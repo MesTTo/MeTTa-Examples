@@ -3,7 +3,7 @@
 ; Guarantees: the chain and the builtin answer alike for a missing type, an
 ;   open pool, a full pool, an uncapped pool, and a pool with two capacity
 ;   rows, where the first row the count reaches decides.
-; [tested: examples/ch15-writing-transactions-and-worlds/04-admission_pools.metta; commit=WORKTREE]
+; [tested: examples/ch15-writing-transactions-and-worlds/04-admission_pools.metta; commit=47855fa71210d4e96b27c972d312eb2fba4ae896]
 
 ;(admits <pool> <type>) and (capacity <pool> <n>) in &metta are data: a pool
 ;is a space whose pre-add hook is claimed with a judge over them. The engine
