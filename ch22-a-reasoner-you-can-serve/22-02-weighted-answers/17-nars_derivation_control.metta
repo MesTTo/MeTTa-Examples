@@ -67,6 +67,11 @@
                   1)
        ())
 
+;At a size of 0 no length passes `(< (length $L) $size)`, and the arbiter's
+;body, which tests nothing else, keeps taking the lowest-priority item of (),
+;which is () itself, and never answers. Here the empty tuple is its own limit.
+!(test (LimitSize () 0) ())
+
 ;And what it keeps is the HIGHEST priority, because it drops by the negated
 ;rank: bounding the queue is forgetting the least confident.
 !(test (LimitSize ((Sentence (a (stv 1.0 0.1)) (1))
@@ -101,3 +106,11 @@
 ;nothing left to select.
 !(test (NARS.Derive () ((Sentence ((--> b c) (stv 1.0 0.9)) (2))) 100)
        (() ((Sentence ((--> b c) (stv 1.0 0.9)) (2)))))
+
+;Queues bounded at 0, the two numbers after the step budget, keep nothing:
+;the first selection derives, both queues are cut to (), and the empty task
+;queue stops the loop at the next step whatever the budget is.
+!(test (NARS.Derive ((Sentence ((--> a b) (stv 1.0 0.9)) (1)))
+                    ((Sentence ((--> b c) (stv 1.0 0.9)) (2)))
+                    100 0 0)
+       (() ()))

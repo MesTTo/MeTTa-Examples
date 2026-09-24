@@ -58,6 +58,12 @@
                   1)
        ())
 
+;At a size of 0 no count passes `(< (TupleCount $L) $size)`, and the
+;arbiter's body, which tests nothing else, keeps taking the lowest-ranked item
+;of (), which is () itself, and never answers. Here the empty tuple is its own
+;limit.
+!(test (LimitSize () 0) ())
+
 ;`PLN.Derive` is the loop: take the highest-priority task, combine it with
 ;every belief whose stamp is disjoint, add the derivations to both queues,
 ;bound them, repeat. It answers the two queues it ends with.
@@ -84,6 +90,14 @@
 ;nothing left to select.
 !(test (PLN.Derive () ((Sentence (a (stv 1.0 0.9)) (2))) 100)
        (() ((Sentence (a (stv 1.0 0.9)) (2)))))
+
+;Queues bounded at 0, the two numbers after the step budget, keep nothing:
+;the first selection derives, both queues are cut to (), and the empty task
+;queue stops the loop at the next step whatever the budget is.
+!(test (PLN.Derive ((Sentence ((Implication a b) (stv 1.0 0.9)) (1)))
+                   ((Sentence (a (stv 1.0 0.9)) (2)))
+                   100 0 0)
+       (() ()))
 
 ;`PLN.Query` is that loop with the answers filtered to one term and ranked by
 ;confidence, which is why `ConfidenceRank` is here rather than in the ranking
