@@ -43,8 +43,11 @@ site. `(generated-by collapse)` denotes the span of the construct that created
 a closure; it does not claim a position for the closure itself. The error index
 is local to one report; match it rather than assuming a particular number.
 `source-error` rows are diagnostic events. An arithmetic refusal can record both
-the caught native exception as text and the final MeTTa Error atom. Join frame
-queries to the Error value you want to inspect, as the executable example does.
+the caught native exception as text and the final MeTTa Error atom. The text is
+a function of the exception alone: an unbound variable in it prints as `_`, and
+variables it shares print as `A`, `B`, so observing one source twice records the
+same text. Join frame queries to the Error value you want to inspect, as the
+executable example does.
 
 Functions loaded before observation have no recorded source map. The report
 names them with `source-function-unavailable`, and their error frames use
