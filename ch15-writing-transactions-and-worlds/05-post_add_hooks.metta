@@ -1,7 +1,7 @@
 ; Purpose: claim a space's post-add hook, whose four verdicts read a landed
 ;   atom: (Accept) keeps it, (Accept <atom>) replaces it, (Refuse <words>)
 ;   undoes the write and throws, (Drop) removes it silently.
-; [tested: examples/ch15-writing-transactions-and-worlds/05-post_add_hooks.metta; commit=WORKTREE]
+; [tested: examples/ch15-writing-transactions-and-worlds/05-post_add_hooks.metta; commit=5bae989dfe8735448d575856e72f735bb2043e24]
 
 ;A post-add hook is the pre-add hook of the file before this one, read
 ;against a LANDED atom instead of an offered one. It claims the same write

@@ -2,7 +2,7 @@
 ;   pool's pre-add hook with that chain, and hold the two to the same verdict.
 ; Guarantees: the chain and the builtin answer alike for a missing type, an
 ;   open pool, a full pool and an uncapped pool.
-; [tested: examples/ch15-writing-transactions-and-worlds/04-admission_pools.metta; commit=WORKTREE]
+; [tested: examples/ch15-writing-transactions-and-worlds/04-admission_pools.metta; commit=5bae989dfe8735448d575856e72f735bb2043e24]
 
 ;(admits <pool> <type>) and (capacity <pool> <n>) in &metta are data: a pool
 ;is a space whose pre-add hook is claimed with a judge over them. The engine

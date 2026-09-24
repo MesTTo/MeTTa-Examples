@@ -1,6 +1,6 @@
 ; Purpose: claim a space's pre-add hook for one function and show its four
 ;   verdicts, (Accept), (Accept <atom>), (Refuse <words>) and (Drop).
-; [tested: examples/ch15-writing-transactions-and-worlds/03-pre_add_hooks.metta; commit=WORKTREE]
+; [tested: examples/ch15-writing-transactions-and-worlds/03-pre_add_hooks.metta; commit=5bae989dfe8735448d575856e72f735bb2043e24]
 
 ;A pre-add hook claims the write door of one space for one function of one
 ;argument, the incoming atom. Every write into the claimed space consults it
