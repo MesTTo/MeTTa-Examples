@@ -1,8 +1,9 @@
 ; Purpose: specify the shipped space-admission-verdict builtin in MeTTa, claim a
 ;   pool's pre-add hook with that chain, and hold the two to the same verdict.
 ; Guarantees: the chain and the builtin answer alike for a missing type, an
-;   open pool, a full pool and an uncapped pool.
-; [tested: examples/ch15-writing-transactions-and-worlds/04-admission_pools.metta; commit=5bae989dfe8735448d575856e72f735bb2043e24]
+;   open pool, a full pool, an uncapped pool, and a pool with two capacity
+;   rows, where the first row the count reaches decides.
+; [tested: examples/ch15-writing-transactions-and-worlds/04-admission_pools.metta; commit=WORKTREE]
 
 ;(admits <pool> <type>) and (capacity <pool> <n>) in &metta are data: a pool
 ;is a space whose pre-add hook is claimed with a judge over them. The engine
@@ -35,13 +36,16 @@
       (collapse (match &metta (capacity $pool $limit) $limit))))
 
 ;space-atom-count is the store's own clause bookkeeping, a property read per
-;add rather than an enumeration of everything the pool holds.
+;add rather than an enumeration of everything the pool holds. Every capacity
+;row binds, walked the way metta-admission-typed walks its types: the first
+;limit the count has reached refuses, in the order the rows were added, and a
+;pool that reaches none of them is admitted.
 (= (metta-admission-within $pool $limits)
    (if (== $limits ())
        (Accept)
-       (if (< (space-atom-count $pool) (car-atom $limits))
-           (Accept)
-           (Refuse (pool-at-capacity (car-atom $limits))))))
+       (if (>= (space-atom-count $pool) (car-atom $limits))
+           (Refuse (pool-at-capacity (car-atom $limits)))
+           (metta-admission-within $pool (cdr-atom $limits)))))
 
 ;Contract atoms for one pool: Ticket-typed members, at most two of them.
 !(add-atom &metta (admits &metta-pool Ticket))
@@ -76,3 +80,16 @@
 !(assertEqual (space-admission-verdict &metta-pool (ticket a))
               (metta-admission-verdict &metta-pool (ticket a)))
 !(test (space-admission-verdict &metta-pool (ticket a)) (Accept))
+
+;Two capacity rows, the second tighter than the first. The pool holds two
+;tickets, under the first bound and at the second, so the second decides: the
+;builtin reads every row and names the first one the count reaches, and a
+;chain that tested only its first limit admitted what the builtin refused.
+!(add-atom &metta (capacity &metta-pool 5))
+!(add-atom &metta (capacity &metta-pool 2))
+!(assertEqual (space-admission-verdict &metta-pool (ticket a))
+              (metta-admission-verdict &metta-pool (ticket a)))
+!(test (metta-admission-verdict &metta-pool (ticket a))
+       (Refuse (pool-at-capacity 2)))
+!(remove-atom &metta (capacity &metta-pool 5))
+!(remove-atom &metta (capacity &metta-pool 2))
