@@ -15,7 +15,7 @@
 !(test (typing-rule-demo unknown-demo) (seen unknown-demo))
 
 !(add-typing-rule! deny-unknown-demo ordinary %Undefined% DemoPayload
-                   (refuse unknown-demo-is-not-a-payload))
+                   (Refuse unknown-demo-is-not-a-payload))
 !(test (typing-rule-demo unknown-demo)
        (Error (typing-rule-demo unknown-demo)
               (BadArgType 1 DemoPayload %Undefined%

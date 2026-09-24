@@ -6,13 +6,13 @@
 
 ;A rule head says WHICH shape it rewrites. A guard inside the rule says
 ;whether the match it got is one the rewrite can honour, which is a different
-;question and needs a different answer: `(refuse Reason)`. egg's tensor
+;question and needs a different answer: `(Refuse Reason)`. egg's tensor
 ;compiler does the same thing in Rust, validating the nodes it is about to
 ;build and returning nothing when they are invalid.
 (: strength (-> Atom Atom %Undefined%))
 (= (strength (dose $n) (unit mg))
    (if (> $n 1000)
-       (refuse "a dose above 1000 is not a milligram strength")
+       (Refuse "a dose above 1000 is not a milligram strength")
        (noeval (mg $n))))
 
 ;A refusal is a decline, not an error: the call carries on down the rest of

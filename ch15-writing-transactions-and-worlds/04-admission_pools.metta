@@ -1,3 +1,9 @@
+; Purpose: specify the shipped space-admission-verdict builtin in MeTTa, claim a
+;   pool's pre-add hook with that chain, and hold the two to the same verdict.
+; Guarantees: the chain and the builtin answer alike for a missing type, an
+;   open pool, a full pool and an uncapped pool.
+; [tested: examples/ch15-writing-transactions-and-worlds/04-admission_pools.metta; commit=WORKTREE]
+
 ;(admits <pool> <type>) and (capacity <pool> <n>) in &metta are data: a pool
 ;is a space whose pre-add hook is claimed with a judge over them. The engine
 ;ships that judge as the builtin space-admission-verdict, Prolog-bodied by
@@ -22,7 +28,7 @@
        (metta-admission-bounded $pool)
        (if (has-declared-type $atom (car-atom $types))
            (metta-admission-typed $pool $atom (cdr-atom $types))
-           (refuse (does-not-carry (car-atom $types))))))
+           (Refuse (does-not-carry (car-atom $types))))))
 
 (= (metta-admission-bounded $pool)
    (metta-admission-within $pool
@@ -32,10 +38,10 @@
 ;add rather than an enumeration of everything the pool holds.
 (= (metta-admission-within $pool $limits)
    (if (== $limits ())
-       (accept)
+       (Accept)
        (if (< (space-atom-count $pool) (car-atom $limits))
-           (accept)
-           (refuse (pool-at-capacity (car-atom $limits))))))
+           (Accept)
+           (Refuse (pool-at-capacity (car-atom $limits))))))
 
 ;Contract atoms for one pool: Ticket-typed members, at most two of them.
 !(add-atom &metta (admits &metta-pool Ticket))
@@ -69,4 +75,4 @@
 !(remove-atom &metta (capacity &metta-pool 2))
 !(assertEqual (space-admission-verdict &metta-pool (ticket a))
               (metta-admission-verdict &metta-pool (ticket a)))
-!(test (space-admission-verdict &metta-pool (ticket a)) (accept))
+!(test (space-admission-verdict &metta-pool (ticket a)) (Accept))

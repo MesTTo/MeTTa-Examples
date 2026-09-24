@@ -1,3 +1,8 @@
+; Purpose: claim a space's post-add hook, whose four verdicts read a landed
+;   atom: (Accept) keeps it, (Accept <atom>) replaces it, (Refuse <words>)
+;   undoes the write and throws, (Drop) removes it silently.
+; [tested: examples/ch15-writing-transactions-and-worlds/05-post_add_hooks.metta; commit=WORKTREE]
+
 ;A post-add hook is the pre-add hook of the file before this one, read
 ;against a LANDED atom instead of an offered one. It claims the same write
 ;door of one space for one function of one argument, and the same four
@@ -8,30 +13,30 @@
 ;and the reason to have both is that only the post phase can see what the
 ;write actually did.
 
-(= (audit (raw $x)) (accept (cooked $x)))
-(= (audit (secret $x)) (refuse "no secrets survive the audit"))
-(= (audit (dup $x)) (drop))
-(= (audit (plain $x)) (accept))
+(= (audit (raw $x)) (Accept (cooked $x)))
+(= (audit (secret $x)) (Refuse "no secrets survive the audit"))
+(= (audit (dup $x)) (Drop))
+(= (audit (plain $x)) (Accept))
 
 !(declare-post-add! &pool audit)
 
-;(accept) leaves the landed atom where it is.
+;(Accept) leaves the landed atom where it is.
 !(add-atom &pool (plain 1))
 !(test (match &pool (plain $x) $x) 1)
 
-;(accept <atom>) REPLACES it: the atom that landed is removed and the
+;(Accept <atom>) REPLACES it: the atom that landed is removed and the
 ;handler's is written through the same door, granted so the hook does not
 ;fire on its own output.
 !(add-atom &pool (raw 7))
 !(test (match &pool (cooked $x) $x) 7)
 !(test (collapse (match &pool (raw $x) $x)) ())
 
-;(drop) removes what landed, so the caller still sees the success of a write
+;(Drop) removes what landed, so the caller still sees the success of a write
 ;that leaves nothing behind.
 !(add-atom &pool (dup 3))
 !(test (collapse (match &pool (dup $x) $x)) ())
 
-;(refuse <words>) throws with the handler's own sentence, and the write is
+;(Refuse <words>) throws with the handler's own sentence, and the write is
 ;undone first: an audited-and-rejected atom is not left in the space for the
 ;next reader to find.
 !(test (repr (catch (add-atom &pool (secret 1))))
@@ -47,7 +52,7 @@
 !(test (collapse (match &pool (uncovered $x) $x)) ())
 
 ;One claimant per name here as well, checked when the claim is made.
-(= (other-audit $a) (accept))
+(= (other-audit $a) (Accept))
 !(test (repr (catch (declare-post-add! &pool other-audit)))
        "(Error (metta_hook_conflict &pool post-add audit other-audit) none)")
 
@@ -55,9 +60,9 @@
 ;decides what is allowed in and the post hook decides what to do about what
 ;got in. The post phase runs only when the pre phase wrote the atom AS
 ;OFFERED, so a pre transform is not audited twice.
-(= (gate (raw $x)) (accept))
-(= (gate (banned $x)) (drop))
-(= (gate (plain $x)) (accept))
+(= (gate (raw $x)) (Accept))
+(= (gate (banned $x)) (Drop))
+(= (gate (plain $x)) (Accept))
 !(declare-pre-add! &pool gate)
 !(add-atom &pool (raw 8))
 !(test (match &pool (cooked 8) found) found)

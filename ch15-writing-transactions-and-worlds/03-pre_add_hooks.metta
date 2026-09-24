@@ -1,16 +1,24 @@
+; Purpose: claim a space's pre-add hook for one function and show its four
+;   verdicts, (Accept), (Accept <atom>), (Refuse <words>) and (Drop).
+; [tested: examples/ch15-writing-transactions-and-worlds/03-pre_add_hooks.metta; commit=WORKTREE]
+
 ;A pre-add hook claims the write door of one space for one function of one
 ;argument, the incoming atom. Every write into the claimed space consults it
-;first, and the handler answers with one of four verdicts: (accept) lets the
-;atom in as offered, (accept <atom>) lets a TRANSFORMED atom in instead,
-;(refuse <words>) throws carrying the handler's own words, and (drop)
+;first, and the handler answers with one of four verdicts: (Accept) lets the
+;atom in as offered, (Accept <atom>) lets a TRANSFORMED atom in instead,
+;(Refuse <words>) throws carrying the handler's own words, and (Drop)
 ;skips the write silently while the caller sees success. This is the general
 ;mechanism behind capacity and admission: arbitrary MeTTa deciding what a
 ;space contains.
+;The verdicts are capitalized, the way MeTTa writes its data and control
+;values (True, Empty, Error). A lowercase (drop) would be a CALL wherever a
+;library defines drop, lib_functional's list drop among them, and a handler
+;answering it there would stop covering the atom it was written for.
 
-(= (guard (secret $x)) (refuse "no secrets in this pool"))
-(= (guard (raw $x)) (accept (cooked $x)))
-(= (guard (dup $x)) (drop))
-(= (guard (plain $x)) (accept))
+(= (guard (secret $x)) (Refuse "no secrets in this pool"))
+(= (guard (raw $x)) (Accept (cooked $x)))
+(= (guard (dup $x)) (Drop))
+(= (guard (plain $x)) (Accept))
 
 !(declare-pre-add! &pool guard)
 
@@ -43,7 +51,7 @@
 
 ;One claimant per name, checked when the claim is made: a second claimant is
 ;refused with both named, never raced at call time.
-(= (other-guard $a) (accept))
+(= (other-guard $a) (Accept))
 !(test (repr (catch (declare-pre-add! &pool other-guard)))
        "(Error (metta_hook_conflict &pool pre-add guard other-guard) none)")
 
