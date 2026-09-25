@@ -38,7 +38,12 @@
 ; know is refused with all of them listed, so a typo is not an absent platform. The
 ; host NAME is not a key: gethostname/1 is library(socket)'s, and a whole network
 ; library is too much to link for one string.
-!(test (platform-info family) "unix")
+; The family is whichever of the host's platform flags is set: "windows", "apple",
+; "unix", or "emscripten" on a WebAssembly build, which sets that flag in place of
+; unix; and "unknown" where none is [source 2026-09-25T16:38:54+10:00:
+; lib/lib_system/lib_system.pl, platform_value(family, _)]. The claim names the four,
+; so it holds wherever a flag names the host and fails where none does.
+!(test (is-member (platform-info family) ("windows" "apple" "unix" "emscripten")) True)
 !(test (platform-info dialect) "swi")
 !(test (== (platform-info cores) (platform-info cores)) True)
 !(test (size-atom (platform-info version-numbers)) 3)
