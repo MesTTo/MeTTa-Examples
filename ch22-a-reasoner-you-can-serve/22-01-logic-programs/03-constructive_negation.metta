@@ -210,15 +210,42 @@
 
 ;;;; What has no dual ;;;;
 ;
-;A form whose negation cannot be computed soundly raises rather than answering
-;from an incomplete dual, because an incomplete dual answers "not provable"
-;for something that is provable, which is a wrong answer and not a missing
-;one. A builtin has no equations to negate, so (not-provable (+ 1 2)) raises;
-;so does a special form. The comparisons are the exception, because each one's
-;opposite is another comparison.
+;A builtin or a special form has no equations to dual, and its call is still
+;negated when every variable it reads is bound: negation as failure is sound
+;for a ground goal, so the call runs and the answer is True when none of its
+;answers is. (+ 1 2) answers 3, which is not True. With a variable unbound it
+;raises instead of answering, because failure cannot say which values fail.
+!(test (not-provable (+ 1 2)) True)
+!(test (not-provable (once (bird tweety))) False)
 !(test (not-provable (> 1 2)) True)
 !(test (not-provable (> 2 1)) False)
 !(test (not-provable (== 1 1)) False)
+
+;;;; Once per question, not once per proof ;;;;
+;
+;A negation answers once for each binding of the variables the rest of the
+;clause reads. mc-tavish has three pensions, three proofs of
+;(pension mc-tavish $any), and the question whether he has none is answered
+;once.
+!(test (collapse (not-provable (pension mc-tavish $any))) (False))
+
+;A recursion over a cycle is decided by the dual, which reads the recursion
+;coinductively: evaluating (reaches a c) itself goes round the loop from a to
+;a before it ever tries b, and never returns, while its negation answers.
+!(add-atom &self (link a a))
+!(add-atom &self (link a b))
+!(add-atom &self (link b c))
+(= (reaches $x $y) (match &self (link $x $y) True))
+(= (reaches $x $y) (and (match &self (link $x $z) True) (reaches $z $y)))
+!(test (not-provable (reaches a c)) False)
+!(test (not-provable (reaches c a)) True)
+
+;An open question answers for every value its variable can take. != tests a
+;term as it stands, and inside a negation that test on a variable still
+;unbound is read both ways: different under a dif constraint, the same under
+;unification. So a value bound afterwards gets the negation's own answer there.
+!(test (collapse (let $r (not-provable (!= $x 1)) (let $x 1 $r))) (True))
+!(test (collapse (let $r (not-provable (!= $x 1)) (let $x 2 $r))) (False))
 
 ;;;; Negating an arithmetic bound narrows a domain ;;;;
 ;
