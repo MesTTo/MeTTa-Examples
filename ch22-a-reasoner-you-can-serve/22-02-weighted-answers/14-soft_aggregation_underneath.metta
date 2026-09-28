@@ -6,16 +6,16 @@
 (similar cat feline 0.8)
 (similar fish shark 0.5)
 
-;`soft-symbol?` tests the WRITTEN representation rather than the metatype,
-;and that is the whole reason it exists: since a name the engine holds a
+;The scorer's symbol test is `is-symbol`, which reads the WRITTEN
+;representation rather than the metatype: since a name the engine holds a
 ;function for is Grounded under `get-metatype`, a metatype test would answer
 ;False for `min` and take the symbol similarity out of every scorer that met
 ;a function name.
-!(test (soft-symbol? cat) True)
-!(test (soft-symbol? min) True)
-!(test (soft-symbol? 1) False)
-!(test (soft-symbol? "text") False)
-!(test (soft-symbol? (f 1)) False)
+!(test (is-symbol cat) True)
+!(test (is-symbol min) True)
+!(test (is-symbol 1) False)
+!(test (is-symbol "text") False)
+!(test (is-symbol (f 1)) False)
 
 ;`soft-fold` is the aggregation, dispatched on its name: two clauses, one per
 ;aggregation, rather than four accessors called once per position. `min` is
