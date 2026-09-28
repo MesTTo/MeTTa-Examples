@@ -53,13 +53,15 @@
 ; all an XML attribute can hold.
 !(test (markup-write (element a ((attr n 1) (attr k sym)) ())) "<a n=\"1\" k=\"sym\"/>")
 
-; HTML's own rules are the host's: an omitted end tag HTML allows is not an error,
-; so this parses and nests the second paragraph inside the first.
+; HTML's own rules come from the library's HTML5 DTD, generated from the WHATWG
+; HTML Standard: an omitted end tag HTML allows is not an error, so this parses,
+; and a bare fragment, with no enclosing element to close the first paragraph
+; into, nests the second paragraph inside it.
 !(test (markup-parse-html "<p>one<p>two")
        (element p () ("one" (element p () ("two")))))
 !(test (markup-text (markup-parse-html "<p>a<b>c</b></p>")) "ac")
 
-; Every parse is STRICT, which is the difference between this library and the
+; An XML parse is STRICT, which is the difference between this library and the
 ; host's own reader: a missing end tag, a stray close tag and text outside any
 ; element are each repaired by the parser with a warning on stderr and a DOM
 ; anyway, and each is a refusal here.
